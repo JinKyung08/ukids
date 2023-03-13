@@ -11,11 +11,13 @@
 ------
 
 
+<br>
 
 ## 🔗 UIKDS - Github
 
-[UKIDS]: https://github.com/93backend/ukids
+- [Ukids - Github](https://github.com/93backend/ukids.git)
 
+<br>
 
 
 ## 📄 상세 내용
