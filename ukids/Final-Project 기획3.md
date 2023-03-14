@@ -11,7 +11,7 @@
 
 ## 1. UI 디자인 투표 및 UI 시안 분배
 
-<img src="img/메인시안.PNG" alt="메인시안" style="zoom:67%;" /><img src="img/장난감대여시안.PNG" alt="장난감대여시안" style="zoom:67%;" /><img src="img/어린이집상세시안.PNG" alt="어린이집상세시안" style="zoom:67%;" />
+<img src="img/메인시안.PNG" alt="메인시안" style="zoom:30%;" /><img src="img/장난감대여시안.PNG" alt="장난감대여시안" style="zoom:30%;" /><img src="img/어린이집상세시안.PNG" alt="어린이집상세시안" style="zoom:30%;" />
 
 - 서진경 디자인으로 확정!!
 
@@ -49,4 +49,4 @@
 
 - 조규완님 / 이다영님
 
-  ![유키즈 erd](img/유키즈 erd.png)
+  ![유키즈 erd](../img/유키즈%20erd.png)
