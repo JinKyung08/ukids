@@ -93,8 +93,8 @@
   - [성북구도시관리공단_장난감대여리스트_20190530](https://www.data.go.kr/data/15044149/fileData.do#tab-layer-openapi)
 
 - https://specialoffer.kr/ 장난감
-  - [2023-01-12_ebbnee_cafe24_5339_1.xlsb](project/2023-01-12_ebbnee_cafe24_5339_1.xlsb)
-  - [2023-01-12_ebbnee_cafe24_5339_2.xls](project/2023-01-12_ebbnee_cafe24_5339_2.xls)
+  - [2023-01-12_ebbnee_cafe24_5339_1.xlsb](ukids/project/2023-01-12_ebbnee_cafe24_5339_1.xlsb)
+  - [2023-01-12_ebbnee_cafe24_5339_2.xls](ukids/project/2023-01-12_ebbnee_cafe24_5339_2.xls)
 
 
 
