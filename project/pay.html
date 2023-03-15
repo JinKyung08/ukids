@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="utf-8">
+    <title>UKIDS | 결제</title>
+    <!-- SEO Meta Tags
+    <meta name="description" content="Cartzilla - Bootstrap E-commerce Template">
+    <meta name="keywords" content="bootstrap, shop, e-commerce, market, modern, responsive,  business, mobile, bootstrap, html5, css3, js, gallery, slider, touch, creative, clean">
+    <meta name="author" content="Createx Studio"> -->
+    <!-- Viewport-->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Favicon and Touch Icons-->
+    <link rel="apple-touch-icon" sizes="180x180" th:href="@{/img/ukids/logo.jpg}">
+    <link rel="icon" type="image/png" sizes="32x32" th:href="@{/img/ukids/logo.jpg}">
+    <link rel="icon" type="image/png" sizes="16x16" th:href="@{/img/ukids/logo.jpg}">
+    <link rel="manifest" th:href="@{/site.webmanifest}">
+    <link rel="mask-icon" color="#fe6a6a" th:href="@{/safari-pinned-tab.svg}">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="theme-color" content="#ffffff">
+    <!-- Vendor Styles including: Font Icons, Plugins, etc.-->
+    <link rel="stylesheet" media="screen" th:href="@{/vendor/simplebar/dist/simplebar.min.css}"/>
+    <link rel="stylesheet" media="screen" th:href="@{/vendor/tiny-slider/dist/tiny-slider.css}"/>
+    <link rel="stylesheet" media="screen" th:href="@{/vendor/drift-zoom/dist/drift-basic.min.css}"/>
+    <link rel="stylesheet" media="screen" th:href="@{/vendor/lightgallery.js/dist/css/lightgallery.min.css}"/>
+    
+    <!-- Main Theme Styles + Bootstrap-->
+    <link rel="stylesheet" media="screen" th:href="@{/css/theme.min.css}">
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" th:href="@{/css/footer.css}">
+
+    <!--해당 페이지 css-->
+    <link rel="stylesheet" th:href="@{/css/pay.css}">
+    
+    <!--jquery-->
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="https://js.tosspayments.com/v1/payment"></script>
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+
+  </head>
+
+  <!-- Body-->
+  <body class="handheld-toolbar-enabled">
+
+    <!-- 로그인 모달 관련  -->
+    <div th:fragment="modal" th:replace="~{common :: modal}"></div>
+
+    <main class="page-wrapper">
+
+      <!-- 헤더!!!!!! -->
+      <header th:fragment="header" th:replace="~{common :: header}"></header>
+
+
+
+
+      <!-- 결제 시작!!!!!!!!!-->
+      <section class="position-relative bg-dark bg-size-cover bg-position-center-x py-5 mb-4" id="paymain">
+        <div class="container position-relative zindex-5 mb-3">
+          <div class="order-lg-2 mb-3 mb-lg-0 pt-0 pb-4">
+            <nav aria-label="breadcrumb">
+              <ol class="breadcrumb breadcrumb-light fw-bold fs-md flex-lg-nowrap justify-content-center justify-content-lg-end">
+                <li class="breadcrumb-item"><a class="text-nowrap" th:href="@{/index}"><i class="ci-home"></i>유키즈</a></li>
+                <li class="breadcrumb-item text-nowrap"><a th:href="@{/mypage-7}">장바구니</a></li>
+                <li class="breadcrumb-item text-nowrap active" aria-current="page" style="color: #ee0842;">결제</li>
+              </ol>
+            </nav>
+          </div>
+          <div class="order-lg-1 pe-lg-4 text-center text-lg-start">
+            <h1 class="h3 text-light mb-0 fw-bold" style="margin-top: 110px; margin-left: 30px;">대여 / 결제</h1>
+          </div>
+        </div>
+      </section>
+      <div class="container mb-5 pb-3">
+        <div class="bg-light shadow-lg rounded-3 overflow-hidden">
+		  <!-- <form th:action="@{/kakaoPay}" id="orderForm" method="post" > -->
+            <div class="row">
+              <!-- Content-->
+              <section class="col-lg-7 pt-2 pt-lg-4 pb-4 mb-3">
+                <div class="pt-2 px-4 pe-lg-0 ps-xl-5">
+                  
+                  <div class="d-flex flex-wrap justify-content-between align-items-center border-bottom pb-3">
+                    <div class="py-1 px-3 fw-bold fs-4">주문자 정보</div>
+                  </div>
+                  <!-- 정보-->
+                  <div class="d-block d-sm-flex align-items-center py-4 ">
+                    <div class="text-center text-sm-start">
+                      <!-- <form method="post" action="" name="rent_order"> -->
+                        <div class="row">
+                          <div class="col-sm-6">
+                            <div class="mb-3">
+                              <label class="form-label px-2 fw-bold fs-5" for="name">이름</label>
+                            <input class="form-control payname" name="name" type="text" id="name" th:value="${session.loginMember.name}">
+                          </div>
+                        </div>  
+                      </div>
+
+                      <div class="row">
+                        <div class="col-sm-6">
+                          <div class="mb-3">
+                            <label class="form-label px-2 fw-bold fs-5 d-block" for="checkout-email">이메일</label>
+                            <div class="d-flex">
+                              <input class="form-control payemail" type="text" name="str_email01" id="email1" th:value="${#strings.setSplit(session.loginMember.email, '@')[0]}"> <span class="at">@</span>
+                              <input class="form-control payemail" type="text" name="str_email02" id="email2" th:value="${#strings.setSplit(session.loginMember.email, '@')[1]}">
+                              <select class="form-select payemail" name="selectEmail" id="email3">
+                                <option value="1" selected>직접입력</option>
+                                <option value="naver.com">naver.com</option>
+                                <option value="hanmail.net">hanmail.net</option>
+                                <option value="nate.com">nate.com</option>
+                                <option value="gmail.com">gmail.com</option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <div class="row">
+                        <div class="col-sm-6">
+                          <div class="mb-3">
+                            <label class="form-label px-2 fw-bold fs-5" for="phone">연락처</label>
+                            <div class="d-flex">
+                              <input class="form-control payphone" type="tel" id="phone1" th:value="${#strings.setSplit(session.loginMember.phone,'-')[0]}" required>
+                              <span class="hyphen">-</span> 
+                              <input class="form-control payphone" type="tel" id="phone2" th:value="${#strings.setSplit(session.loginMember.phone,'-')[1]}" required>
+                              <span class="hyphen">-</span> 
+                              <input class="form-control payphone" type="tel" id="phone3" th:value="${#strings.setSplit(session.loginMember.phone,'-')[2]}" required>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      
+                      <div class="d-flex flex-wrap justify-content-between align-items-center border-bottom pb-3 deliInfo">
+                        <div class="py-1 px-3 fw-bold fs-4">배송 정보</div>
+                      </div>
+
+                      <div class="row">
+                        <div class="col-sm-7">
+                          <div class=" px-3 mt-4 d-flex">
+                            <div class="form-check form-check-inline">
+                              <input class="form-check-input" type="checkbox" id="copy" name="onlyone" onclick="Copy();">
+                              <label class="form-check-label fs-6" for="copy">주문자 정보와 동일</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                              <input class="form-check-input" type="checkbox" id="newInfo" name="onlyone" onclick="newIn();" >
+                              <label class="form-check-label fs-6" for="newInfo">새로운 배송지</label>
+                            </div>
+                          </div>
+                        </div>  
+                      </div>
+
+		         	<form class="f" id="orderForm" method="POST" onSubmit="return checkForm()">
+		         	
+                      <div class="row">
+                        <div class="col-sm-6">
+                          <div class="mb-3">
+                            <label class="form-label px-2 fw-bold fs-5 mt-4" for="copyName" >이름</label>
+                            <input class="form-control payname" type="text" id="copyName" name="name" placeholder="이름을 입력해주세요." required>
+                          </div>
+                        </div>  
+                      </div>
+
+                      <div class="row">
+                        <div class="col-sm-6">
+                          <div class="mb-3">
+                            <label class="form-label px-2 fw-bold fs-5" for="checkout-phone">연락처</label>
+                            <div class="d-flex">
+                              <input class="form-control payphone" type="tel" id="copyphone1" required>
+                              <span class="hyphen">-</span> 
+                              <input class="form-control payphone" type="tel" id="copyphone2" required>
+                              <span class="hyphen">-</span> 
+                              <input class="form-control payphone" type="tel" id="copyphone3" required>
+                              <input type="hidden" id="phonetotal" name="phone">
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="row">
+                        <div class="col-sm-10">
+                          <div class="mb-3">
+                            <label class="form-label px-2 fw-bold fs-5 d-block" for="checkout-address">주소</label>
+                            <input class="form-control" name="postCode" type="text" id="ka_postcode" style="width: 200px; display: inline;" placeholder="우편번호" required>
+                            <input class="findzip" type="button" onclick="postcode()" value="우편번호 찾기"><br>
+                            <input class="form-control payadd" type="text" id="ka_address" placeholder="기본 주소지" name="address" required><br>
+                            <input class="form-control payadd2" type="text" id="ka_detailAddress" name="address2" placeholder="상세 주소를 입력해주세요." required>
+                          </div>
+                        </div>
+                      </div>
+    
+                      <div class="row">
+                        <div class="col-sm-6">
+                          <div class="mb-3">
+                            <label class="form-label px-2 fw-bold fs-5 mt-4" for="checkout-fn">배송 요청사항</label>
+                            <select class="form-select payadd" id="validationCustom03" name="request">
+                              <option value="">배송메모를 선택해주세요.</option>
+                              <option id="rmemo" value="1">요청사항을 직접 입력합니다.</option>
+                              <option value="배송전 미리 연락 바랍니다.">배송전 미리 연락 바랍니다.</option>
+                              <option value="부재시 경비실에 맡겨주세요.">부재시 경비실에 맡겨주세요.</option>
+                              <option value="부재시 전화주시거나 문자 남겨주세요.">부재시 전화주시거나 문자 남겨주세요.</option>
+                            </select>
+                            <input class="form-control memo" type="text" style="display:none;">
+                          </div>
+                        </div>  
+                      </div>
+                      
+                    
+                      <div class="d-flex flex-wrap justify-content-between align-items-center border-bottom pb-3 deliInfo">
+                        <div class="py-1 px-3 fw-bold fs-4">결제 정보</div>
+                      </div>
+
+                      <h5 class="px-3 mt-4 mb-3 fw-bold">결제 수단</h5>
+
+                      <div class="select">
+                        <input class="c" type="radio" id="cardbtn" name="method" th:value="카드" required="required">
+                        <label class="btn btn-secondary btn-shadow chkbox cardbtn" for="cardbtn">카 드</label>
+                        <input class="" type="radio" id="transfer" name="method" th:value="계좌이체" required="required">
+                        <label class="btn btn-secondary btn-shadow chkbox kakao" for="transfer">계좌이체</label>                   
+                      </div>
+
+                      <div class="kakaopay">
+                        <ul class="payli">
+                          <li>지원 카드 : 모든 카드 등록/결제 가능</li>
+                          <li>계좌이체는 계좌이체는 ATM이나 은행 홈페이지에 접속하지 않고 유키즈 홈페이지 내에서 즉시 결제, 출금되는 결제 방식 입니다.</li>
+						  <li>현재 약 20여개의 은행이 가능하며 현금영수증 발행은 결제 시 즉시 발급받으실 수 있습니다.</li>
+                        </ul>
+                      </div>
+                      <input id="memberNo" name="memberNo" type="hidden" th:value="${session.loginMember.memberNo}" >
+					  	<th:block th:if="${startDate}!=null">
+					  		<input id="tp" name="price" type="hidden" >
+                      		<input id="startDate" name="startDate" th:value="${startDate}" type="hidden" >
+                      		<input id="endDate" name="endDate" th:value="${endDate}" type="hidden" >
+                      		<input id="toyNo" name="toyNo" th:value="${toy.toyNo}" type="hidden" >
+                      	</th:block>
+                      	<th:block th:unless="${startDate}!=null">
+                      		<input id="totalprice" name="price" th:value="${totalPay}" type="hidden">
+                      		<input id="toyNoGroup" name="toyNo" type="hidden" >
+                      		<input id="toyStartDateGroup" name="startDate" type="hidden" >
+                      		<input id="toyEndDateGroup" name="endDate" type="hidden" >
+                      	</th:block>
+						</form> 
+                      <h5 class="px-3 mt-4 fw-bold">주문자 동의</h5>
+							
+                      <div class="row">
+                        <div class="col-sm-8">
+                          <div class="mb-3 mx-3">
+                            <div class="form-check">
+                              <input class="form-check-input" type="checkbox" id="selectAll" name="terms" >
+                              <label class="form-check-label" for="selectAll" style="font-weight: 600;">결제대행서비스 약관에 모두 동의합니다.</label>
+                            </div>
+                            <div class="form-check">
+                              <input class="form-check-input" type="checkbox" id="ex-check-1" name="terms" required>
+                              <label class="form-check-label" for="ex-check-1">[필수] 대여 이용약관 동의 <a class="termscon" href="#">내용보기</a></label>
+                            </div>
+                            <div class="form-check">
+                              <input class="form-check-input" type="checkbox" id="ex-check-2" name="terms" required>
+                              <label class="form-check-label" for="ex-check-2">[필수] 개인정보 처리방침 동의 <a class="termscon" href="#">내용보기</a></label>
+                            </div>
+                            <div class="form-check">
+                              <input class="form-check-input" type="checkbox" id="ex-check-3" name="terms" >
+                              <label class="form-check-label" for="ex-check-3">전자금융거래 기본약관 <a class="termscon" href="#">내용보기</a></label>
+                            </div>
+                          </div>
+                        </div>  
+                      </div>                  
+					 
+                    
+                   	
+                    </div>
+                  </div>
+                
+                </div>
+              </section>
+
+
+              <!-- Sidebar-->
+              <aside class="col-lg-5 ps-xl-5">
+                <hr class="d-lg-none">
+                <div class="p-4 h-100 ms-auto border-start">
+                  <div class="px-lg-2">
+                    <div class="text-center py-3 border-bottom">
+                        <div class=" px-3 fw-bold fs-4">대여 상품</div>
+                    </div>
+                    
+                    <!-- Product--> 
+                    <!-- 장난감대여상세에서 바로 결제 할때 -->
+                   <th:block th:each="toy:${toy}">   
+                    <div class="d-block d-sm-flex align-items-center py-4 border-bottom" >                    
+                     <img class="rounded-3" th:src="${toy.toyImg}" style="width: 130px; height: 150px; margin-right: 10px;" alt="Product">
+                      <div class="text-center text-sm-start">
+                        <h3 class="h6 product-title mb-2 fw-bold"><a th:href="@{|/toy-detail?no=${toy.toyNo}|}">[[${toy.toyNm1}]]</a></h3>
+                        <div class="d-inline-block"><small>대여기간</small><br>
+                          <th:block th:if="${startDate != null}">
+                          [[${startDate}]] ~ [[${endDate}]]<br>
+                          (<span class="day"></span>일)
+                          </th:block>
+                          <th:block th:unless="${startDate != null}">
+                          [[${#dates.format(toy.startDate, 'yyyy-MM-dd')}]] ~ [[${#dates.format(toy.endDate, 'yyyy-MM-dd')}]]<br>
+                          (<span th:text="${toy.date}"></span>일)
+                          </th:block>
+                          
+                          </div>
+                        <div class="form-inline pt-2 fw-bold price" style="color: #fc6c93;" th:if="${startDate !=null}">
+                        </div>
+                        <div class="form-inline pt-2 fw-bold" style="color: #fc6c93;" th:unless="${startDate !=null}" th:text="${toy.realPay} + 원">
+                        </div>
+                      </div>
+                    </div>
+                    </th:block>    
+                    
+                	<th:block th:if="${startDate != null}">
+	                    <div class="py-4 border-bottom fw-bold">
+	                      <span>총 대여금액</span><span class="pr price"></span><span> (1개)</span><br>
+	                      <span>배송비</span><span class="pr">1000원</span>
+	                    </div>
+	
+	                    <div class="py-4 fw-bold">
+	                      <span>총 결제금액</span><span class="total"></span>
+	                    </div>
+                   </th:block>
+                   
+                	<th:block th:unless="${startDate != null}">
+	                    <div class="py-4 border-bottom fw-bold">
+	                      <span>총 대여금액</span><span class="pr price" >[[${pay}]]원</span><span> ([[${#lists.size(toy)}]]개)</span><br>
+	                      <span>배송비</span><span class="pr">1000원</span>
+	                    </div>
+	
+	                    <div class="py-4 fw-bold">
+	                      <span>총 결제금액</span><span class="total">[[${totalPay}]]원</span>
+	                    </div>
+                   </th:block>
+                   
+                    <button class="btn btn-primary btn-shadow d-block w-100 mt-4 pay" type="submit" form="orderForm" id="payment-button">결제하기</button>                   
+                  
+                  </div>
+                </div>
+              </aside>            
+          </div>
+          
+        </div>
+      </div>
+
+
+
+</main>
+
+<!-- 푸터!!!!!!!!!!-->
+<!-- Footer-->
+<footer th:fragment="footer" th:replace="~{common :: footer}"></footer>
+
+
+<!-- Back To Top Button--><a class="btn-scroll-top" href="#top" data-scroll><span class="btn-scroll-top-tooltip text-muted fs-sm me-2">Top</span><i class="btn-scroll-top-icon ci-arrow-up">   </i></a>
+<!-- Vendor scrits: js libraries and plugins-->
+<script th:src="@{/vendor/bootstrap/dist/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/vendor/simplebar/dist/simplebar.min.js}"></script>
+<script th:src="@{/vendor/tiny-slider/dist/min/tiny-slider.js}"></script>
+<script th:src="@{/vendor/smooth-scroll/dist/smooth-scroll.polyfills.min.js}"></script>
+<script th:src="@{/vendor/drift-zoom/dist/Drift.min.js}"></script>
+<script th:src="@{/vendor/lightgallery.js/dist/js/lightgallery.min.js}"></script>
+<script th:src="@{/vendor/lg-video.js/dist/lg-video.min.js}"></script>
+
+<!-- Main theme script-->
+<script th:src="@{/js/theme.min.js}"></script>
+<script th:src="@{/js/pay.js}"></script>
+
+</body>
+</html>
+
+<script type="text/javascript" th:inline="javascript">
+function StringToDate(date) {
+	let yyyy = date.substring(0, 4);
+	let mm = date.substring(5, 7);
+	let dd = date.substring(8, 10);
+	mm = Number(mm) - 1;
+    
+	let stringNewDate = new Date(yyyy, mm, dd);
+	stringNewDate.setDate(stringNewDate.getDate());
+    
+	return stringNewDate.getFullYear() +
+		"-" + ((stringNewDate.getMonth() + 1) > 9 ? (stringNewDate.getMonth() + 1).toString() : "0" + (stringNewDate.getMonth() + 1)) +
+		"-" + (stringNewDate.getDate() > 9 ? stringNewDate.getDate().toString() : "0" + stringNewDate.getDate().toString());
+}
+//요청사항 직접입력
+$( document ).ready( function() {
+    $( '.memo' ).keyup( function() {
+    	var memo = $('.memo').val();
+		$('#rmemo').attr('value',memo);
+    }); 
+});
+
+//결제수단
+$(document).ready(function(){
+	$("#payment-button").click(function(){
+		if($('#copyphone1').val()!=''&&$('#copyphone2').val()!=''&&$('#copyphone3').val()!=''
+				&&$('#copyName').val()!=''&&$('#ka_postcode').val()!=''&&$('#ka_address').val()!=''
+				&&$('#ka_detailAddress').val()!=''){
+			if($('input[name=method]').is(":checked")==false){
+				alert("결제수단을 선택해주세요.");
+			}
+		}
+	});
+});
+
+//대여기간 계산
+var start = new Date(/*[[${startDate}]]*/{});
+var end = new Date(/*[[${endDate}]]*/{});
+var result= end-start;
+var day = result / (1000*60*60*24) ;
+$('.day').html(day);
+
+
+//리스트 인지 아닌지
+var toyVali = /*[[${toy}]]*/{};
+console.log(toyVali.length)
+var toy;
+if(toyVali.length==undefined){
+	toy = [];
+	toy.push(/*[[${toy}]]*/{});
+}else{
+	toy= toyVali;
+	console.log(toy);
+}
+
+//장난감 가격
+var toyPrice = 0;
+for(var i=0; i<toy.length; i++){
+	toyPrice += Number(toy[i].toyPay);
+}
+//일 X 가격
+//(일X가격) + 1000
+if(toyVali.length==undefined){
+	var price = day * toyPrice;
+	$('.price').html(price + "원");
+	var totalPrice = price + 1000;
+	$('.total').html(totalPrice + "원");
+	$('#tp').attr('value', totalPrice);
+}else{
+	var toyNoList = /*[[${toy}]]*/{};
+	var toyNoGroup = '';
+	var toyStartDateGroup = '';
+	var toyEndDateGroup = '';
+	for(var i=0; i<toyNoList.length; i++){
+		if(i==0){
+			toyNoGroup += toyNoList[i].toyNo;
+			toyStartDateGroup += StringToDate(toyNoList[i].startDate);
+			toyEndDateGroup += StringToDate(toyNoList[i].endDate);
+		}else{
+			toyNoGroup += ',' + toyNoList[i].toyNo;
+			toyStartDateGroup += ',' + StringToDate(toyNoList[i].startDate);
+			toyEndDateGroup += ',' + StringToDate(toyNoList[i].endDate);
+		}
+	}
+	$('#toyNoGroup').val(toyNoGroup);
+	$('#toyStartDateGroup').val(toyStartDateGroup);
+	$('#toyEndDateGroup').val(toyEndDateGroup);
+
+	var totalPrice = $('#totalprice').val();
+} 
+console.log("총금액(토스페이용)::" + totalPrice);
+
+//토스페이먼츠 결제
+//카드 계좌이체 선택
+var paymethod = '';
+	$("#cardbtn").click(function () {
+	 	paymethod='카드';
+	});
+	$("#transfer").click(function () {
+		paymethod='계좌이체';
+	});
+
+//토스페이에 나오는 장난감 이름
+var toyName = "";
+if(toyVali.length==undefined){
+	toyName = toy[0].toyNm1
+}else{
+	toyName = toy[0].toyNm1.substr(0,18)+'...' + ' 외 '+ (toy.length-1);
+}
+var cName = /*[[${session.loginMember.name}]]*/{};
+
+console.log(toyPrice);
+console.log("토이 이름::::::::"+toyName);
+console.log(cName);
+
+//토스에 보낼 주문번호 uuid
+function uuidv4() {
+  return 'xxxxxxxxxxxx4xxxyxxxxxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+    var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+    return v.toString(16);
+  });
+}
+
+//토스페이 관련
+var clientKey = 'test_ck_OAQ92ymxN34D0MRbEBv3ajRKXvdk'
+var tossPayments = TossPayments(clientKey) // 클라이언트 키로 초기화하기
+
+function checkForm(){ 
+//입력 필수 항목
+	if(!$('#ex-check-1').is(":checked")){
+		alert('필수항목을 체크해 주세요.');
+		return false;
+	}else if(!$('#ex-check-2').is(":checked")){
+		alert('필수항목을 체크해 주세요.');
+		return false;
+	}else{
+		//전화번호 합치기
+		  var cp1 = $('#copyphone1').val();
+		  var cp2 = $('#copyphone2').val();
+		  var cp3 = $('#copyphone3').val();
+		  var totalcp = cp1+cp2+cp3;
+		  $('#phonetotal').val(totalcp);
+		  
+		  var vallii = $('#cardbtn').val();		  
+		  var listVar = $('input[name=method]').is(":checked");
+		  
+		  //대여시작일 반납일 여러개
+		  /* var startDateList = ''; // 23-1-12, 24-3-12, 22-1-3, 
+		  for(tdasdfasfasd){
+			  startDateList+= toy[i].startDate
+		  }
+		  const param_password = $("<input type='hidden' value=" + startDateList + " name='startDate' readonly>");
+		  $("#orderForm").append(param_password); */
+		  
+		  
+		  //form -> successPay로 
+		  var formArray = $('#orderForm').serializeArray();
+		  var returnArray = {};	
+		
+		    for (var i = 0; i < formArray.length; i++){
+		        returnArray[formArray[i]['name']] = formArray[i]['value'];
+		    }
+			
+		  console.log(formArray);
+		  console.log(returnArray);
+		   $.ajax({
+				type : 'POST',
+				dataType: 'text',
+				url : '/insertPayForm',
+				data : JSON.stringify(returnArray),
+				contentType:"application/json",
+		        beforeSend : function() {
+		        },
+				success : function(data){
+					console.log("data::::::::" + data);
+					tossPayments.requestPayment(paymethod, { // 결제 수단 파라미터
+					     // 결제 정보 파라미터
+					     amount: totalPrice,
+					     orderId: uuidv4()+'-'+data,
+					     orderName: toyName,
+					     customerName: cName,
+					     successUrl: 'http://localhost/success',
+					     failUrl: 'http://localhost/fail'
+					   })
+					   .catch(function (error) {
+					     if (error.code === 'USER_CANCEL') {
+					       location.href('/failPay?payNo='+data);
+					     } else if (error.code === 'INVALID_CARD_COMPANY') {
+					       // 유효하지 않은 카드 코드에 대한 에러 처리
+					     }
+					  });
+				},
+				error : function(request, status, error) {
+		            alert("list search fail :: error code: "
+		            + request.status + "\n" + "error message: "
+		            + error + "\n");
+		        }
+			});
+	}
+  return false;
+}
+
+</script>

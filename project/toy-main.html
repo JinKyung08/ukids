@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="utf-8">
+    <title>UKIDS | 장난감대여</title>
+    <!-- SEO Meta Tags
+    <meta name="description" content="Cartzilla - Bootstrap E-commerce Template">
+    <meta name="keywords" content="bootstrap, shop, e-commerce, market, modern, responsive,  business, mobile, bootstrap, html5, css3, js, gallery, slider, touch, creative, clean">
+    <meta name="author" content="Createx Studio"> -->
+    <!-- Viewport-->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Favicon and Touch Icons-->
+    <link rel="apple-touch-icon" sizes="180x180" th:href="@{/img/ukids/logo.jpg}">
+    <link rel="icon" type="image/png" sizes="32x32" th:href="@{/img/ukids/logo.jpg}">
+    <link rel="icon" type="image/png" sizes="16x16" th:href="@{/img/ukids/logo.jpg}">
+    <link rel="manifest" th:href="@{/site.webmanifest}">
+    <link rel="mask-icon" color="#fe6a6a" th:href="@{/safari-pinned-tab.svg}">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="theme-color" content="#ffffff">
+    <!-- Vendor Styles including: Font Icons, Plugins, etc.-->
+    <link rel="stylesheet" media="screen" th:href="@{/vendor/simplebar/dist/simplebar.min.css}"/>
+    <link rel="stylesheet" media="screen" th:href="@{/vendor/tiny-slider/dist/tiny-slider.css}"/>
+    <link rel="stylesheet" media="screen" th:href="@{/vendor/drift-zoom/dist/drift-basic.min.css}"/>
+    <link rel="stylesheet" media="screen" th:href="@{/vendor/lightgallery.js/dist/css/lightgallery.min.css}"/>
+    
+    <!-- Main Theme Styles + Bootstrap-->
+    <link rel="stylesheet" media="screen" th:href="@{/css/theme.min.css}">
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" th:href="@{/css/footer.css}">
+    <link rel="stylesheet" th:href="@{/css/toy-main.css}">
+
+    <!--해당 페이지 css-->
+
+    
+    <!--jquery-->
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+
+<style>
+.sbm:hover{
+	cursor: pointer;
+}
+</style>
+
+  </head>
+
+  <!-- Body-->
+  <body class="handheld-toolbar-enabled">
+
+   <div th:fragment="modal" th:replace="~{common :: modal}"></div>
+
+    <main class="page-wrapper">
+
+      <!-- 헤더!!!!!! -->
+      <header th:fragment="header" th:replace="~{common :: header}"></header>
+
+
+
+    <section class="bg-darker bg-size-cover bg-position-center heyjude py-3"
+      style="background-image: url(img/ukids/toy-main/toyma.png);">
+      <div class="container py-md-4">
+
+
+        <div class="d-lg-flex justify-content-between pb-3">
+          <div class="order-lg-2 mb-3 mb-lg-0 pt-lg-2">
+            <nav aria-label="breadcrumb">
+              <ol class="breadcrumb breadcrumb-light flex-lg-nowrap justify-content-center justify-content-lg-start">
+                <li class="breadcrumb-item"><a class="text-nowrap fs-6" th:href="@{/index}"><i class="ci-home"></i>유키즈</a>
+                </li>
+                <li class="breadcrumb-item text-nowrap fs-6"><a id="tc" th:href="@{/toy-main}">장난감 대여목록</a>
+                </li>
+              </ol>
+            </nav>
+          </div>
+          <div class="order-lg-1 pe-lg-4 text-center text-lg-start">
+          </div>
+        </div>
+
+		<h1 class="text-light text-center text-lg-start py-3 fw-bold">장난감 대여</h1>
+		
+      </div>
+    </section>
+    
+    
+    <div class="container-sm ">
+      <!-- Toolbar-->
+      <div class="bg-light shadow-lg rounded-3 p-4 mt-n5 mb-4 border border-3 border-danger">
+        <form id="toyForm" th:action="@{/toy-main}" method="get">
+          <div class="row gy-3 gx-4">
+
+            <div class="container col-10">
+              <div class="input-group">
+                <input class="form-control pe-5 rounded" type="text" name="searchValue" th:value="${searchValue}" placeholder="장난감을 검색해 주세요">
+                <input type="submit" id="btnSubmit" style="display:none;"/>
+                <label for="btnSubmit"><i class="ci-search position-absolute top-50 end-0 translate-middle-y zindex-5 me-3 sbm"></i></label>
+
+              </div>
+            </div>
+
+          </div>
+
+          <div class="container row g-4 pt-4">
+            <hr>
+
+            <div class="container col-lg-12 ">
+              <!-- Categories-->
+              <div class="rounded-3 p-3 mt-n5 mb-4 pb-0">
+                <div class="card-body px-4 pb-0 mt-1">
+                  <div class="widget">
+
+                    <div class="d-inline-block    ms-5">
+                      <div class="form-check mb-2" th:each="c,cStat:${cate}" th:if="${cStat.index<5}">
+                        <input class="form-check-input" type="checkbox" name="searchType" th:value="${c}" th:id="${#strings.trim(#strings.replace(c, '/', ''))}">
+                        <label class="form-check-label fs-6" th:for="${#strings.trim(#strings.replace(c, '/', ''))}" th:text="${c}"></label>
+                      </div>
+                    </div>
+                    
+                    <div class="d-inline-block    ms-5">
+                      <div class="form-check mb-2" th:each="c,cStat:${cate}" th:if="${cStat.index<9 && cStat.index>=5}">
+                        <input class="form-check-input" type="checkbox" name="searchType" th:value="${c}" th:id="${#strings.trim(#strings.replace(c, '/', ''))}">
+                        <label class="form-check-label fs-6" th:for="${#strings.trim(#strings.replace(c, '/', ''))}" th:text="${c}"></label>
+                      </div>
+                      <div class="form-check mb-2" style="visibility:hidden">
+                        <input class="form-check-input" type="checkbox" id="">
+                        <label class="form-check-label fs-6" for=""></label>
+                      </div>
+                    </div>
+                    
+                    <div class="d-inline-block    ms-5">
+                      <div class="form-check mb-2" th:each="c,cStat:${cate}" th:if="${cStat.index<13 && cStat.index>=9}">
+                        <input class="form-check-input" type="checkbox" name="searchType" th:value="${c}" th:id="${#strings.trim(#strings.replace(c, '/', ''))}">
+                        <label class="form-check-label fs-6" th:for="${#strings.trim(#strings.replace(c, '/', ''))}" th:text="${c}"></label>
+                      </div>
+                      <div class="form-check mb-2" style="visibility:hidden">
+                        <input class="form-check-input" type="checkbox" id="">
+                        <label class="form-check-label fs-6" for=""></label>
+                      </div>
+                    </div>
+                    
+                    <div class="d-inline-block    ms-5">
+                      <div class="form-check mb-2" th:each="c,cStat:${cate}" th:if="${cStat.index<17 && cStat.index>=13}">
+                        <input class="form-check-input" type="checkbox" name="searchType" th:value="${c}" th:id="${#strings.trim(#strings.replace(c, '/', ''))}">
+                        <label class="form-check-label fs-6" th:for="${#strings.trim(#strings.replace(c, '/', ''))}" th:text="${c}"></label>
+                      </div>
+                      <div class="form-check mb-2" style="visibility:hidden">
+                        <input class="form-check-input" type="checkbox" id="">
+                        <label class="form-check-label fs-6" for=""></label>
+                      </div>
+                    </div>
+                    
+                    <div class="d-inline-block    ms-5">
+                      <div class="form-check mb-2" th:each="c,cStat:${cate}" th:if="${cStat.index<21 && cStat.index>=17}">
+                        <input class="form-check-input" type="checkbox" name="searchType" th:value="${c}" th:id="${#strings.trim(#strings.replace(c, '/', ''))}">
+                        <label class="form-check-label fs-6" th:for="${#strings.trim(#strings.replace(c, '/', ''))}" th:text="${c}"></label>
+                      </div>
+                      <div class="form-check mb-2" style="visibility:hidden">
+                        <input class="form-check-input" type="checkbox" id="">
+                        <label class="form-check-label fs-6" for=""></label>
+                      </div>
+                   </div>
+                   
+                  </div>
+                </div>
+              </div>
+
+		    </div>
+          </div>
+            
+        </form>
+      </div>
+                   
+    </div>
+
+
+    <!-- Items grid-->
+    <section class="container py-4 py-sm-1">
+      <div class="row pt-3 pt-sm-0">
+      
+        <th:block th:if="${toyCount == 0}">
+      	  <h3 style="text-align: center;">검색결과가 없습니다.</h3>   
+        </th:block>
+        
+        <th:block th:if="${list == null}">
+      	  <h3 style="text-align: center;">등록된 상품이 없습니다.</h3>   
+        </th:block>
+        
+        <th:block th:if="${list != null}" th:each="toy : ${list}">
+	        <div class="col-md-4 col-sm-6 mb-grid-gutter">
+	          <a class="card product-card h-100 border-0 shadow pb-2" th:href="@{|/toy-detail?no=${toy.toyNo}|}">
+	            <img class="card-img-top" th:src="${toy.toyImg}">
+	            <div class="card-body  pt-3 pb-4">
+	              <div class="card-body p-0 h-75">
+	                <h3 class="h5 mb-2" th:text="${toy.toyNm1}"></h3>
+	              </div>
+	              <div class="d-flex flex-wrap justify-content-between align-items-center">
+	                <div class=" me-2">
+	                  <span class="fs-5 ms-1 fw-bold geul2" th:if="${toy.toyType} == null">대여가능</span>
+	                  <span class="fs-5 ms-1 fw-bold geul2" style="color:rgb(235, 72, 72);" th:unless="${toy.toyType}== null">대여중</span>
+	                </div>
+	                <div class="t rounded-1 py-1 px-2 geul" th:text="${#strings.replace(toy.toyPay,'.0','원')}"></div>
+	              </div>
+	            </div>
+	          </a>
+	        </div>
+	    </th:block>       
+      </div>
+    </section>
+
+
+
+    <div class="container-sm" th:if="${toyCount != 0}">
+      <!-- Pagination-->
+      <nav class="d-flex justify-content-between pt-2 mb-5" aria-label="Page navigation">
+        <ul class="pagination">
+          <li class="page-item"><a class="page-link" href="#" onclick="movePage(1);"><i class="ci-arrow-left me-2"></i>Prev</a></li>
+        </ul>
+        <ul class="pagination">
+          <li class="page-item d-sm-none"><span class="page-link page-link-static">1 / 5</span></li>
+          <th:block th:each="num, status : ${#numbers.sequence(pageInfo.startPage, pageInfo.endPage)}">
+			<th:block th:if="${status.current == pageInfo.currentPage}">
+	          <li class="page-item d-none d-sm-block page"><span class="page-link">[[${status.current}]]<span
+                class="visually-hidden">(current)</span></span></li>
+	        </th:block>
+	      <th:block th:if="${status.current != pageInfo.currentPage}">
+	          <li class="page-item d-none d-sm-block"><a class="page-link" href="#" th:onclick="|movePage(${status.current});|">[[${status.current}]]</a></li>
+	      </th:block>
+        </ul>
+        <ul class="pagination">
+          <li class="page-item"><a class="page-link" href="#" aria-label="Next" th:onclick="|movePage(${pageInfo.nextPage});|">Next<i
+                class="ci-arrow-right ms-2"></i></a></li>
+        </ul>
+      </nav>
+    </div>
+    <br>
+  </main>
+
+  <!-- 푸터!!!!!!!!!!-->
+  <!-- Footer-->
+  
+  <footer th:fragment="footer" th:replace="~{common :: footer}"></footer>
+  
+  <!-- Back To Top Button--><a class="btn-scroll-top" href="#top" data-scroll><span class="btn-scroll-top-tooltip text-muted fs-sm me-2">Top</span><i class="btn-scroll-top-icon ci-arrow-up">   </i></a>
+  <!-- Vendor scrits: js libraries and plugins-->
+  <script th:src="@{/vendor/bootstrap/dist/js/bootstrap.bundle.min.js}"></script>
+  <script th:src="@{/vendor/simplebar/dist/simplebar.min.js}"></script>
+  <script th:src="@{/vendor/tiny-slider/dist/min/tiny-slider.js}"></script>
+  <script th:src="@{/vendor/smooth-scroll/dist/smooth-scroll.polyfills.min.js}"></script>
+  <script th:src="@{/vendor/drift-zoom/dist/Drift.min.js}"></script>
+  <script th:src="@{/vendor/lightgallery.js/dist/js/lightgallery.min.js}"></script>
+  <script th:src="@{/vendor/lg-video.js/dist/lg-video.min.js}"></script>
+  
+  <!-- Main theme script-->
+  <script th:src="@{/js/theme.min.js}"></script>
+  </body>
+  </html>
+  
+<script type="text/javascript" th:inline="javascript">
+
+$( document ).ready(function() {
+
+	var searchlist = /*[[${searchType}]]*/{};
+    for(var i=0; i<searchlist.length; i++){
+    	var id = searchlist[i];
+    	var idd = id.replace('/', '');
+    	$('#'+idd).prop("checked", true);
+	}
+
+});
+
+	function movePage(pageUrl){
+		const pageTag = $("<input type='hidden' value=" + pageUrl + " name='page' readonly>");
+		$("#toyForm").append(pageTag);
+		$('#toyForm').submit();
+		
+	}
+</script>

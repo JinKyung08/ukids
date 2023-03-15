@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="utf-8">
+    <title>UKIDS | 장난감대여 상세</title>
+    <!-- SEO Meta Tags
+    <meta name="description" content="Cartzilla - Bootstrap E-commerce Template">
+    <meta name="keywords" content="bootstrap, shop, e-commerce, market, modern, responsive,  business, mobile, bootstrap, html5, css3, js, gallery, slider, touch, creative, clean">
+    <meta name="author" content="Createx Studio"> -->
+    <!-- Viewport-->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Favicon and Touch Icons-->
+    <link rel="apple-touch-icon" sizes="180x180" th:href="@{/img/ukids/logo.jpg}">
+    <link rel="icon" type="image/png" sizes="32x32" th:href="@{/img/ukids/logo.jpg}">
+    <link rel="icon" type="image/png" sizes="16x16" th:href="@{/img/ukids/logo.jpg}">
+    <link rel="manifest" th:href="@{/site.webmanifest}">
+    <link rel="mask-icon" color="#fe6a6a" th:href="@{/safari-pinned-tab.svg}">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="theme-color" content="#ffffff">
+    <!-- Vendor Styles including: Font Icons, Plugins, etc.-->
+    <link rel="stylesheet" media="screen" th:href="@{/vendor/simplebar/dist/simplebar.min.css}"/>
+    <link rel="stylesheet" media="screen" th:href="@{/vendor/tiny-slider/dist/tiny-slider.css}"/>
+    <link rel="stylesheet" media="screen" th:href="@{/vendor/drift-zoom/dist/drift-basic.min.css}"/>
+    <link rel="stylesheet" media="screen" th:href="@{/vendor/lightgallery.js/dist/css/lightgallery.min.css}"/>
+    
+    <!-- Main Theme Styles + Bootstrap-->
+    <link rel="stylesheet" media="screen" th:href="@{/css/theme.min.css}">
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" th:href="@{/css/footer.css}">
+
+    <!--해당 페이지 css-->
+    <link rel="stylesheet" th:href="@{/css/toy-detail.css}">
+    
+    <!--jquery-->
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://npmcdn.com/flatpickr/dist/l10n/ko.js"></script>
+
+
+  </head>
+
+  <!-- Body-->
+  <body class="handheld-toolbar-enabled">
+
+    <!-- 로그인 모달 관련  -->
+    <div th:fragment="modal" th:replace="~{common :: modal}"></div>
+
+    <main class="page-wrapper">
+
+      <!-- 헤더!!!!!! -->
+      <header th:fragment="header" th:replace="~{common :: header}"></header>
+
+
+
+
+
+      <!-- 장난감 상세 시작  -->
+
+      <!-- Page Title-->
+      <section class="position-relative bg-dark bg-size-cover bg-position-center-x py-5 mb-4" id="mainImg">
+        <div class="container position-relative zindex-5 mb-3">
+          <div class="order-lg-2 mb-3 mb-lg-0 pt-0 pb-4">
+            <nav aria-label="breadcrumb">
+              <ol class="breadcrumb breadcrumb-light fw-bold fs-md flex-lg-nowrap justify-content-center justify-content-lg-end">
+                <li class="breadcrumb-item"><a class="text-nowrap" th:href="@{/index}"><i class="ci-home"></i>유키즈</a></li>
+                <li class="breadcrumb-item text-nowrap"><a th:href="@{/toy-main}">장난감목록</a></li>
+                <li class="breadcrumb-item text-nowrap active" aria-current="page" style="color: #fd0d4d;">장난감 상세보기</li>
+              </ol>
+            </nav>
+          </div>
+          <div class="order-lg-1 pe-lg-4 text-center text-lg-start" >
+            <h1 class="h3 text-light mb-0 fw-bold" style="margin-top: 110px; margin-left: 30px;">[[${toy.toyNm1}]]</h1>
+          </div>
+        </div>
+      </section>
+
+      <div class="container">
+        <!-- Gallery + details-->
+        <div class="bg-light shadow-lg rounded-3 px-4 py-3 mb-5">
+          <div class="px-lg-3">
+            <div class="row">
+              <!-- Product gallery-->
+              <div class="col-lg-7 pe-lg-0 pt-lg-3 mb-4">
+                <div class="product-gallery">
+                  <div class="product-gallery-preview order-sm-2">
+                    <div class="product-gallery-preview-item active" id="first"><img class="image-zoom" th:src="${toy.toyImg}" th:data-zoom="${toy.toyImg}" alt="Product image">
+                      <div class="image-zoom-pane"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- Product details-->
+              <div class="col-lg-5 pt-4 pt-lg-0">
+                <div class="product-details ms-auto pb-3">
+                    <div> 
+                      <ul class="toy-details">
+                        <li>상품명</li>
+                        <li>대여료</li>
+                        <li>배송안내</li>
+                        <li>배송지역</li>
+                        <li>배송비</li>
+                        <li>수량</li>
+                      </ul>
+                    
+                      <ul class="toy-details2">
+                        <li class="listcont">[[${toy.toyNm1}]]</li>
+                        <li class="listcont">[[${#strings.replace(toy.toyPay,'.0','원')}]]<span style="font-size: small;"> / 1일당</span></li>
+                        <li class="listcont">자체배송</li>
+                        <li class="listcont">전국</li>
+                        <li class="listcont">1000원</li>
+                        <li class="listcont">1개<span style="font-size: small;"> / 1인당</span></li>
+                      </ul>
+                    </div>
+                    <p class="rentdate">대여기간</p>
+                    <!-- Date range -->
+                    <form id="payInfo" method="get">
+                    <div class="mb-3" style="max-width: 30rem; margin-left: 35px; margin-right: 20px;">
+                      <div class="input-group"><span class="input-group-text"><i class="ci-calendar"></i></span>
+                        <input name="startDate" class="form-control date-picker" type="text" placeholder="대여시작일" id="start-date" onchange="changePickr()">
+                        <input name="endDate" class="form-control date-picker" type="text" placeholder="대여반납일" id="end-date" onclick="clickPickr()">
+                        <input name="toyNo" type="hidden" th:value="${toy.toyNo}">
+                      	
+                      </div>
+                    </div>  
+                    <div class="rentbtn">
+                      <div class="n-add-cart-layer" style="width: 380px; height: 40px;">
+                          <div class="add_cart"><div style="display: inline;">장바구니에 상품이 담겼습니다.</div><a th:href="@{/mypage-7}" class="cart">&nbsp;장바구니로 가기</a></div>
+                      </div>
+                       <button type="submit" class="btn btn-outline-primary rounded-pill" id="cartbtn" style="color:#fc6c93" th:if="${session.loginMember != null}" th:onclick="addCart([[${session.loginMember.memberNo}]]);"><i class="ci-cart"></i>&nbsp;장바구니</button>
+                       <a href="#signin-modal" data-bs-toggle="modal"><button type="button" class="btn btn-outline-primary rounded-pill" id="cartbtn" style="color:#fc6c93" th:if="${session.loginMember == null}" th:onclick="|alert('로그인을 해주세요.')|"><i class="ci-cart"></i>&nbsp;장바구니</button></a>
+                       <button type="submit" class="btn btn-primary rounded-pill" id="rentbtn2" th:if="${session.loginMember != null}">₩ 대여하기</button>
+                       <a href="#signin-modal" data-bs-toggle="modal"><button type="button" class="btn btn-primary rounded-pill" id="rentbtn2" th:if="${session.loginMember == null}" th:onclick="|alert('로그인을 해주세요.')|">₩ 대여하기</button></a>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Product description section 1-->
+        <div class="toy2">
+          <h3 class="toyDe">상세 정보 보기</h3><img class="toyimg" th:src="@{/img/ukids/2x2.png}">
+        </div>
+        <div class="row align-items-center detailinfo more">            
+            <div class="row align-items-center content">
+              <!-- <img src="http://morningstars.cafe24.com/d/G79/248.jpg">  -->
+              [(${#strings.replace(toy.toyEx,'\','')})]
+            </div>           
+              <button type="button" class="btn btn-primary toydetailbtn" id="toybtn">상품정보 더 보기 ∨ </button>
+              <button type="button" class="btn btn-primary toydetailclose hide"  id="toybtn2">상품정보 간략히 &nbsp;∧</button>
+        </div>
+      
+      
+        <!-- Reviews-->
+        <div class="border-top border-bottom my-lg-3 py-5">
+          <div class="container pt-md-2" id="reviews">
+            <div class="row pt-4">
+              <!-- Reviews list-->
+              <div class="col-md-7">
+                <div class="d-flex justify-content-end pb-4">
+                  <div>
+                    <h3 class="toyDe2" th:text="|리뷰(${#lists.size(reviewList)})|"></h3><img class="toyimg2" th:src="@{/img/ukids/2.PNG}">
+                  </div>
+                </div>
+
+			<th:block th:if="${reviewList != null}">
+				<th:block  th:each="review : ${reviewList}"> 
+                  <!-- Review-->
+                  <div class="reviewlist">
+                    <div class="product-review pb-4 mb-4 border-bottom reviewlist" style="margin-left: 2%;">
+                      <div class="d-flex mb-3">
+                        <div class="d-flex align-items-center me-4 pe-2">
+                          <div>
+                            <h6 class="fs-sm mb-0">[[${review.memberId}]]</h6><span class="fs-ms text-muted" th:text="${#dates.format(review.createDate,'yyyy-MM-dd HH:MM')}"></span>
+                          </div>
+                        </div>
+                      </div>
+                      <th:block th:if="${session.loginMember != null && (session.loginMember.id == review.memberId || session.loginMember.role == 'ROLE_ADMIN')}">
+	                      <div class="d-block position-relative mb-3 mb-sm-0 me-sm-4 ms-sm-0 mx-auto" style="width: 12.5rem; float: right;">
+	                        <span class="btn btn-icon btn-danger position-absolute top-0 end-0 py-0 px-1 m-2 trashbtn" th:onclick="|deleteReview(${review.no},${toy.toyNo});|">
+	                          <i class="ci-trash"></i>
+	                        </span>
+	                      </div>
+                      </th:block>
+                      <p class="fs-md mb-2" style="width: 600px;">[[${review.content}]]</p>
+                    </div>
+                  </div>
+	           </th:block>
+		    </th:block>    
+	        <th:block th:if="${reviewList == null}">
+	             <div style="text-align: center;">등록된 리뷰가 없습니다.</div>                    
+			</th:block>
+		
+                  <div class="text-center">
+                    <button class="btn btn-outline-accent" type="button" id="seeMore"><i class="ci-reload me-2" style="color: #fc6c93;"></i><span style="color: #fc6c93;">댓글 더 보기</span></button>
+                  </div>
+
+              </div>
+          
+              <!-- Leave review form-->
+              
+              <div class="col-md-5 mt-2 pt-4 mt-md-0 pt-md-0"  >
+                <div class="bg py-grid-gutter px-grid-gutter rounded-3" id="reviewbox">
+                  <h3 class="h4 pb-2" style="font-weight: 700;">리뷰쓰기</h3>
+	                  <form class="needs-validation" th:action="@{/toyReview}" method="post" novalidate>
+	                    <div class="mb-3">
+	                      <input type="hidden" name="toyNo" th:value="${toy.toyNo}" />
+	                      <textarea class="form-control reWrite" name="content" rows="17" required id="review-text" placeholder="댓글을 작성해주세요." data-bind-characters-target="#charactersRemaining" maxlength="1000"></textarea>
+	                      <small class="form-text text-muted" style="float: right;">
+	                        <span class="textLength" id="charactersRemaining">1000</span>
+	                        자 이내 입력하세요
+	                      </small>
+	                    </div>
+						
+	                    <button class="btn btn-primary btn-shadow d-block w-100 mt-5" type="submit" id="reviewbtn" th:if="${session.loginMember != null}">등 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;록</button>
+	                    <a href="#signin-modal" data-bs-toggle="modal"><button class="btn btn-primary btn-shadow d-block w-100 mt-5" type="button" id="reviewbtn" th:if="${session.loginMember == null}" th:onclick="|alert('로그인을 해주세요.')|">등 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;록</button></a>
+	                  </form>
+                </div>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+      
+        <!-- Product carousel (Style with)-->
+        <div class="container py-5 my-md-3">
+          <div class="toy2">
+            <h3 class="h3 pb-4 mx-3 toyDe">비슷한 장난감</h3><img class="toyimg" th:src="@{/img/ukids/2x2.png}">
+          </div>
+          <div class="tns-carousel tns-controls-static tns-controls-outside">
+            <div class="tns-carousel-inner" data-carousel-options="{&quot;items&quot;: 2, &quot;controls&quot;: true, &quot;nav&quot;: false, &quot;responsive&quot;: {&quot;0&quot;:{&quot;items&quot;:1},&quot;500&quot;:{&quot;items&quot;:2, &quot;gutter&quot;: 18},&quot;768&quot;:{&quot;items&quot;:3, &quot;gutter&quot;: 20}, &quot;1100&quot;:{&quot;items&quot;:4, &quot;gutter&quot;: 30}}}">
+              <!-- Product-->
+              <div th:if="${smilarToy != null}" th:each="st : ${smilarToy}">
+                <div class="card product-card card-static">
+                  <a class="card-img-top d-block overflow-hidden" th:href="@{|/toy-detail?no=${st.toyNo}|}"><img th:src="${st.toyImg}" alt="Product"></a>
+                  <div class="card-body similar py-2">
+                    <h3 class="product-title fs-sm toyname"><a th:href="@{|/toy-detail?no=${st.toyNo}|}">[[${st.toyNm1}]]</a></h3>
+	                   <div class="d-flex justify-content-between">
+	                     <div class="product-price"><span class="rentpri">대여료</span></div>
+	                     <div style="color: rgb(132, 219, 0);" th:if="${st.toyType} == null">대여가능</div>
+	                     <div style="color:rgb(235, 72, 72);" th:unless="${st.toyType} == null">대여중</div>
+	                   </div>
+                    <div class="price">[[${#strings.replace(st.toyPay,'.0','원')}]]</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+</main>
+
+<!-- 푸터!!!!!!!!!!-->
+<!-- Footer-->
+<footer th:fragment="footer" th:replace="~{common :: footer}"></footer>
+
+
+
+<!-- Back To Top Button--><a class="btn-scroll-top" href="#top" data-scroll><span class="btn-scroll-top-tooltip text-muted fs-sm me-2">Top</span><i class="btn-scroll-top-icon ci-arrow-up">   </i></a>
+<!-- Vendor scrits: js libraries and plugins-->
+<script th:src="@{/vendor/bootstrap/dist/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/vendor/simplebar/dist/simplebar.min.js}"></script>
+<script th:src="@{/vendor/tiny-slider/dist/min/tiny-slider.js}"></script>
+<script th:src="@{/vendor/smooth-scroll/dist/smooth-scroll.polyfills.min.js}"></script>
+<script th:src="@{/vendor/drift-zoom/dist/Drift.min.js}"></script>
+<script th:src="@{/vendor/lightgallery.js/dist/js/lightgallery.min.js}"></script>
+<script th:src="@{/vendor/lg-video.js/dist/lg-video.min.js}"></script>
+
+<!-- Main theme script-->
+<script th:src="@{/js/theme.min.js}"></script>
+<script th:src="@{/js/toy-detail.js}"></script>
+</body>
+</html>
+
+<script type="text/javascript" th:inline="javascript">
+$( document ).ready( function() {//대여일 지정
+  //var datatoy = /*[[${dateToy}]]*/{};
+/* 	console.log(datatoy);
+  var sdArr = [];
+  var edArr = [];
+  
+	for(var i=0; i<datatoy.length; i++){
+		const happyNewYear = new Date(datatoy[i].startDate);
+		const year = happyNewYear.getFullYear();
+		const month = happyNewYear.getMonth() + 1;
+		const date = happyNewYear.getDate();
+		const happyNewYear2 = new Date(datatoy[i].endDate);
+		const year2 = happyNewYear2.getFullYear();
+		const month2 = happyNewYear2.getMonth() + 1;
+		const date2 = happyNewYear2.getDate();
+		sdArr.push(`${year}-${month >= 10 ? month : '0' + month}-${date >= 10 ? date : '0' + date}`);
+		edArr.push(`${year2}-${month2 >= 10 ? month2 : '0' + month2}-${date2 >= 10 ? date2 : '0' + date2}`);
+	}
+	console.log(sdArr);
+	console.log(edArr);
+	let ranges = [];
+	for (let i = 0; i < sdArr.length; i++) {
+	  ranges.push({from: sdArr[i], to: edArr[i]});
+	}
+	console.log(ranges); */
+	
+  var type = /*[[${toy.toyType}]]*/{};
+  var today = new Date();
+  var tmrw = new Date(today.setDate(today.getDate()+2));
+
+if(type == null){
+	
+  $("#start-date").flatpickr({
+    monthSelectorType : 'static',
+    locale: "ko",                            
+    minDate: tmrw,
+    dateFormat: "Y-m-d"
+  });
+
+
+	$('#start-date').change(function(){
+	  var date = new Date($("#start-date").val());
+	  date.setDate(date.getDate() + 1);
+	  $("#end-date").flatpickr({
+	    monthSelectorType : 'static',
+	    minDate : date,
+	    locale: "ko",  
+	    dateFormat: "Y-m-d"
+	  });
+	})
+	
+
+	//대여시작일 지정 안하고 눌렀을때
+	$("#end-date").flatpickr({
+	  monthSelectorType : 'static',
+	    locale: "ko",   
+	    minDate: tmrw,                  
+	    dateFormat: "Y-m-d",
+	    disable: [
+	      function(date) {
+	        // disable every multiple of 8
+	        return (date.getDate());
+	      }
+	    ]  
+	  });
+
+	$('#end-date').click(function(){
+	  if($('#start-date').val()==false){
+	    $("#end-date").flatpickr({
+	      monthSelectorType : 'static',
+	        locale: "ko",   
+	        minDate: tmrw,                  
+	        dateFormat: "Y-m-d",
+	        disable: [
+	          function(date) {
+	            // disable every multiple of 8
+	            return (date.getDate());
+	          }
+	        ]  
+	      });
+	      alert("대여 시작일을 선택해주세요.")
+	  }
+	});
+
+}else{
+	$("#start-date").flatpickr({
+		  monthSelectorType : 'static',
+		  locale: "ko",   
+		  minDate: tmrw,                  
+		  dateFormat: "Y-m-d",
+		  disable: [
+		    function(date) {
+		       // disable every multiple of 8
+		       return (date.getDate());
+		    }
+		  ]  
+	});
+		
+	$("#start-date").click(function(){
+		$(".flatpickr-calendar").hide();
+		alert("현재 장난감은 대여중입니다. 다음에 이용해 주세요ㅣ");
+
+	});
+	
+	$("#end-date").flatpickr({
+	  monthSelectorType : 'static',
+	  locale: "ko",   
+	  minDate: tmrw,                  
+	  dateFormat: "Y-m-d",
+	  disable: [
+	    function(date) {
+	      // disable every multiple of 8
+	      return (date.getDate());
+	    }
+	  ]  
+	 });
+	
+	$("#end-date").click(function(){
+		$(".flatpickr-calendar").hide();
+		alert("현재 장난감은 대여중입니다. 다음에 이용해 주세요!");
+
+	});
+
+}
+
+//로그인 alert
+	var lm =/*[[${session.loginMember}]]*/{};
+	if(lm == null){
+		$("#review-text").attr("placeholder", "로그인 후 댓글을 작성해주세요.");
+	}
+	
+	$('#rentbtn2' ).click( function(e) {
+		if(lm != null){
+		    if($('#start-date').val() != ''&& $('#end-date').val() != ''){
+		    	const param_password = $("<input type='hidden' value='true' name='ListOrNot' readonly>");
+		    	$("#payInfo").append(param_password);
+		    	$("#payInfo").attr("action", "/pay")
+		    	$("#payInfo").submit();
+		    }else{
+		      alert("대여일을 선택해주세요.")
+		      e.preventDefault();
+		    }			
+		} 
+	});	
+
+	 $( '#cartbtn' ).click( function(e) {
+		if(lm != null){
+		    if($('#start-date').val() != ''&& $('#end-date').val() != ''){
+		      $( '.add_cart' ).fadeIn(1000).delay(1000).fadeOut(1000);
+		/*      $("#payInfo").attr("action", "/mypage-7")
+		  	  $("#payInfo").submit(); */
+		      e.preventDefault();
+		    }else{
+			      alert("대여일을 선택해주세요.")
+			      e.preventDefault();
+			}	
+		}
+	 });
+
+});
+
+function deleteReview(no, toyNo){
+	var url = "/toyReviewDel?no=";
+	var requestURL = url + no +"&toyNo=" + toyNo;
+	location.replace(requestURL);
+}
+function addCart(memberNo){
+	if($('#start-date').val() != ''&& $('#end-date').val() != ''){
+		const param_password = $("<input type='hidden' value=" + memberNo + " name='memberNo' readonly>");
+		$("#payInfo").append(param_password);
+		var formArray = $("#payInfo").serializeArray();
+		
+		  var returnArray = {};	
+		
+		    for (var i = 0; i < formArray.length; i++){
+		        returnArray[formArray[i]['name']] = formArray[i]['value'];
+		    }
+		  console.log(formArray);
+		  console.log(returnArray);
+			$.ajax({
+				type : 'POST',
+				url : '/addCart',
+				dataType: 'text',
+				data : JSON.stringify(returnArray),
+				contentType:"application/json",
+				error: function(xhr, status, error){
+					alert("에러"+error);
+				},
+				success : function(aa){
+				}
+			});
+		}
+	}
+</script>
